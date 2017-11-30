@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>02.定义原型方法.html</title>
+</head>
+<body>
+  <h1>02.定义原型方法.html</h1>
+</body>
+</html>
+<script>
+  // function User () {}
+  class User {
+    // 默认就有一个constructor, 不写也有这个方法
+    constructor () {
+
+    }
+    hello2 () {
+      alert('我是class 形式的原型方法')
+    }
+    hello3 () {
+      alert('我是hello3')
+    }
+  }
+  User.prototype.hello = function () {
+    alert('ok')
+  }
+  const u = new User()
+</script>

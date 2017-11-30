@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>es5 原型继承</title>
+</head>
+<body>
+  es5 原型继承
+</body>
+</html>
+<script>
+  function Person () {
+    this.name = '小明'
+    this.age = 18
+  }
+
+  function ChinaPerson () {
+
+  }
+  // 继承
+  ChinaPerson.prototype = new Person()
+  var cp = new ChinaPerson()
+  console.log(cp)
+</script>

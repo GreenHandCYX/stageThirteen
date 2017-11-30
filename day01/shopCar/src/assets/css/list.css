@@ -1,0 +1,76 @@
+.list, .list li {
+  padding: 0;
+  margin: 0;
+}
+.list-item {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.list-item-toggle {
+   width: 10%;
+   /*width: 20px;*/
+   text-align: center;
+}
+.list-item-cover {
+  width: 120px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.list-item-cover img {
+  width: 100%;
+}
+.list-item-info {
+  flex: 1;
+  /*padding-top: 32px;*/
+}
+.list-item-info p{
+  position: relative;
+  margin: 0;
+}
+.list-item-title {
+  /*width: 100%;*/
+  /*margin-top: 16px;*/
+  color: #313232;
+  width:200px;
+
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+}
+.list-item-des {
+  font-size: 12px;
+  color: #676767;
+}
+.list-item-footer{
+  position: relative;
+  /*float: left;*/
+  /*position: absolute;*/
+  /*bottom: 0;*/
+  /*top:0;*/
+}
+/*.price {
+  position: 
+}*/
+.list-item-edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  float: right;
+  /*border: 1px solid #ccc;*/
+  box-sizing: border-box;
+}
+.list-item-edit input{
+  width: 24px;
+  height: 24px;
+  outline: none;
+  border: 1px solid #ccc;
+}
+.list-item-edit button {
+  border: 1px solid #ccc;
+  /*outline: none;*/
+}

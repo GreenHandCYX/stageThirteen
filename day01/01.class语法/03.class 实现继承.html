@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>03.class实现继承</title>
+</head>
+<body>
+  <h1>03.class实现继承</h1>
+</body>
+</html>
+<script>
+  class Person {
+    constructor () {
+      this.name = '小明明'
+      this.age = 18
+    }
+  }
+
+  // class ChinaPerson extends Person {
+  //   // constructor () {}
+  // }
+
+class ChinaPerson extends Person {
+    constructor () {
+      // console.log(this)
+      // 调用 父类Person 的constructor, 然后就会继承Person的实例
+      // **super 一定要在 constructor的第一行来写**
+      super() // new Person()
+      console.log(this)
+    }
+}
+
+  // cp 其实是 Person的实例，也是ChinaPerson的实例
+  const cp = new ChinaPerson()
+</script>
+<script>
+// 继承的目的, 只是为使用别人(别的类)封装好的方法!
+// 
+</script>

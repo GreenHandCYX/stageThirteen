@@ -1,0 +1,6 @@
+{
+  // presets 用来指定进行语法转换的包
+  // env 对应的包是 babel-preset-env, 作用是将 es8, es7, es6 转换为 es5
+  // react 对应的包是 babel-preset-react 作用是将 jsx语法 转换为js语法
+  "presets": ["env", "react"]
+}
