@@ -229,7 +229,6 @@ const ele = <div id='17' age="18">我是小明</div>
       
 //参数2必须是原生dom元素
 ReactDom.render(ele,document.querySelector('#box'))
-
 ```
 
 
@@ -258,7 +257,7 @@ webpack.config.js
 {
     //配置babel
     //presets用来指定进行语法转化的包
-    //env对应的包是babel-preset-env,z作用是将es678转为es5
+    //env对应的包是babel-preset-env,作用是将es678转为es5
     //react对应的包是babel-preset-react 作用是将jsx语法转为js语法
     "presets": [
         "env",
@@ -455,11 +454,11 @@ const ele = <div style={ {color:'red',backgroundColor:'grenn'} }>我是</div>
 
 
 
-# react组件
+# react组件(要求构造函数首字母大写)
 
 > 可以认为是对react元素的封装
 
-### a.普通函数组件(要求函数首字母大写)
+### a.普通函数组件
 
 > 函数必须返回一个react元素
 
@@ -508,16 +507,15 @@ ReactDom.render(<Btn />,dom对象)//推荐写法
 //当我们写<Btn />是会判断如果Btn是普通函数，则直接调用
 //如果继承自React.Component会先new Btn()再调用实例的render方法
 
-
 ```
 
-带参数的构造函数组件
 
 
 
 
 
 
+### 带参数的构造函数组件
 
 > 无论是普通函数组件还是构造函数组件都可以在标签上添加属性
 >

@@ -1,7 +1,7 @@
 {
     //配置babel
     //presets用来指定进行语法转化的包
-    //env对应的包是babel-preset-env,z作用是将es678转为es5
+    //env对应的包是babel-preset-env,作用是将es678转为es5
     //react对应的包是babel-preset-react 作用是将jsx语法转为js语法
     "presets": [
         "env",
