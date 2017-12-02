@@ -634,3 +634,384 @@ import ReactDom from 'react-dom'
 
 
 
+
+
+
+
+# class形式的组件
+
+```jsx
+class Btn extends React.Component{
+  //原型方法
+  contructor(){
+    super()
+  }
+  hello(){
+    
+  }
+}
+```
+
+
+
+# setState与this.state的扩展
+
+- 将数据放在this.state中利于通过setState({})重新渲染元素
+- 可以合并为一行this.setState({age:Math.random()})会覆盖this.state中的同名属性就达到了重新渲染
+- 当我们调用setState会先更新this.state中的数据然后再调用当前组件的render方法
+
+
+
+# 组件的生命周期（生命周期函数-生命周期钩子）
+
+### 基础概念
+
+1.组件的出生
+
+constructor()//new的时候就会触发
+
+2.长全了的函数
+
+componentDidMount()//表示组件内即render方法中返回的标签已被添加到了dom中,在render后执行
+
+3.销毁
+
+componentWillUnmount// 即将被销毁()
+
+4.更新
+
+componentDidUpdate组件更新（render）之后
+
+componentWillUpdate组件更新（render）之前
+
+
+
+### 详细用法:
+
+#### 1.
+
+> #### componentWillMount()：
+>
+> 表示即将渲染，在render之前执行，可以用于设置一些前置操作
+>
+> #### componentDidMount():
+>
+> 表示已经渲染,在render之后执行，这时即使更改state的值也不会影响render中渲染的效果，除非调用setState({})重新渲染
+
+
+
+#### 2.
+
+> componentWillUnmount表示即将被销毁即render方法返回的标签即将被移除
+>
+> #### 注:必须是原先元素render方法return返回的值为空才能触发，其他dom操作都不可以
+>
+> 方法：重新render为其他元素或者调用路由
+
+
+
+#### 3.执行顺序
+
+constructor->componentWillMount->render->componentDidMount   而setState相当于再次调用了render
+
+![组件的生命周期函数执行顺义](.\img\组件的生命周期函数执行顺义.jpg)
+
+### 4.
+
+setState相当于先调用componentWillUpdate再调用render然后再调用componentDidUpdate
+
+所以不能在componentWillUpdate，render，componentDidUpdate中再调用setState方法
+
+![组件的生命周期图](.\img\组件的生命周期图.png)
+
+```jsx
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+class App extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      age: 18
+    }
+    console.log('我是: constructor')
+  }
+  //表示组件即将被渲染到DOM中
+  componentWillMount () {
+    console.log('我是: componentWillMount')
+    this.state.age = 999
+  }
+  // 表示组件已经被渲染到DOM中
+  componentDidMount () {
+    console.log('我是: componentDidMount')
+    // this.state.age = 998
+    // this.setState({}) //
+    setTimeout(() => {
+      this.state.age = 998
+      this.setState({})
+    }, 3000)
+  }
+  // 表示组件即将被消毁(组件中render方法返回的标签即将要从dom中移除)
+  componentWillUnmount () {
+    console.log('我是: componentWillUnmount')
+  }
+  // 组件更新之前
+  componentWillUpdate () {
+    console.log('WillUpdate')
+    // this.setState({})
+  }
+  // 组件更新之后
+  componentDidUpdate () {
+     console.log('DidUpdate')
+     // this.setState({})
+  }
+  // this.setState() // componentWillUpdate render componentDidUpdate
+  render () {
+    // this.setState({age: 10})
+    // if (false) {this.setState({})}
+    console.log('我是: render')
+    return (
+      <div>
+        <h1>我是小明明: {this.state.age}</h1>
+        <button onClick={e => this.clickHandler()}>点击按钮</button>
+      </div>
+      )
+  }
+  clickHandler () {
+    // console.log()
+    // this.state.age = 1000
+    this.setState({age: 1000})
+  }
+}
+
+// const Test = () => <h1>我不是App组件</h1>
+const Test = function () {
+  return <h1>我不是App组件</h1>
+}
+ReactDOM.render(<App></App>, document.querySelector('#box'))
+
+
+// setTimeout(function () {
+//   ReactDOM.render(<Test></Test>, document.querySelector('#box'))
+// }, 3000)
+```
+
+
+
+
+
+
+
+# 组件之间的通信(传递数据)
+
+## 父子组件之间传值
+
+直接在父组件中写子组件标签就可以调用
+
+### 父给子:利用组件的props属性完成
+
+在子组件的标签上添加属性，则在组件中可以通过props属性得到父组件传递的数据
+
+### 子给父
+
+1.在父组件中定义一个方法用于修改父组件中的数据
+
+2.把定义好的方法传递给子组件，传递的目的是为了让子组件调用
+
+3.在子组件中调用父组件传递的方法，并可以给方法传递参数（当想传递数据给父组件时调用）
+
+![子往父传递数据 (调用了父组件传递过来的方法)](.\img\子往父传递数据 (调用了父组件传递过来的方法).jpg)
+
+
+
+
+
+## 非父子组件之间的通信(如兄弟组件或多层嵌套组件)
+
+busEvent(自定义)
+
+Redux(相似于vuex)
+
+`bus.js`
+
+```js
+//用来处理非父子组件传值
+const data = {}//存储处理数据的方法
+const bus = {}//第三方实例
+
+
+bus.$on = function(name,fn){
+    //将处理数据的函数名及函数体以键值对的形式存入对象
+    data[name]=fn
+}
+bus.$emit = function(name,arg){
+    //利用name找到data中对应处理数据的方法
+    //并将数据作为参数传入
+    const fn = data[name]
+    fn(arg)
+}
+export default bus
+```
+
+`index.js`
+
+```jsx
+
+import React from 'react'
+import ReactDom from 'react-dom'
+
+
+//引入bus插件处理组件间传值
+import bus from './bus'
+
+
+const BroA=()=>{
+   const msg = 18
+    return (
+        <div>
+            <button onClick={e=>{bus.$emit('mark',msg)}}>发给BroB</button>
+            我是BroA
+        </div>
+    )
+}
+const BroB=()=>{
+        bus.$on('mark',function(msg){
+            alert(msg)
+        })
+        return (
+            <div>
+                我是BroB
+            </div>
+        )
+    }
+
+const App=()=>{
+    return (
+        <div>
+            <BroA></BroA>
+            <BroB></BroB>
+        </div>
+    )
+}
+
+
+ReactDom.render(<App />,document.querySelector('#box'))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 更改this指向的方法
+
+call,apply,bind
+
+es6的箭头函数
+
+es7的::this法
+
+
+
+
+
+
+
+
+
+# react中获取原生dom的方式，在元素标签上加ref属性，通过this.ref获取
+
+
+
+
+
+# 在react中阻止默认事件只能用preventDefault，因为return false在之前代码报错时就不会执行到这
+
+
+
+
+
+
+
+
+
+
+
+# 用setState渲染时只会重新渲染当前组件和当前组件的子组件
+
+
+
+
+
+
+
+
+
+# 关于let和const
+
+1.全部使用let，当发现某个变量不想被修改时使用const
+
+2.全部使用const，当发现某个变量想被修改时使用let
+
+
+
+
+
+
+
+
+
+# 简化input的onChange事件注册：
+
+1.将onChange事件抽离为一个单独的方法
+
+```jsx
+comChange(e,val){
+  this.state[val]=e.target.value
+  this.setState({})
+}
+
+
+
+
+render(){
+  return (
+  	<div>
+    	<input type="text" onChange={e=>this.comChange(e,this.state.name)}/>	
+      	<input type="text" onChange={e=>this.comChange(e,this.state.age)}/>	
+    </div>	
+  )
+}
+```
+
+2.Object.defineProperty
+
+
+
+# 函数剩余参数列表
+
+```jsx
+ {
+        // 标记
+        // rest argument
+        // test('a', 'b', 'c')
+        // function test(...arg) {
+        //   arg // ['a', 'b', 'c'], 相当于arguments
+        //   this.addTodo(...arg)// 相当于 this.addTodo('a', 'b', 'c')
+        // }
+      }
+```
+
+
+
+# 路由
+
+react的路由是所有框架中最简单的
