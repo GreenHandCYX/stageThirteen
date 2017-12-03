@@ -42,7 +42,12 @@ class YeYe extends React.Component {
   testFn () {
     window.alert('我被调用')
   }
-  // 1.
+  //添加了这个方法就可以在所有子辈上访问这个顶级父类的方法或属性了
+  //但是需限制这个方法传递的参数的格式
+  //通过prop-types组件实现限制
+      //发送数据方设置childContextTypes
+      //接收数据方设置contextTypes
+  //只要满足限制的组件才能绑定传递数据的方法
   getChildContext () {
     return {
       age: '18',

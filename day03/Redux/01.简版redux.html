@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" >
+    <button class="add">+</button>
+    <button class="remove">-</button>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script>
+    const oInp = document.querySelector('input');
+    const oAdd = document.querySelector('.add');
+    const oRemove = document.querySelector('.remove');
+    //使用redux进行全局状态(数据)的管理
+    //分三步:
+    //1.创建reducer函数对全局状态进行初始化及操作
+    function reducer(state,action){
+        //参数一：代表全局状态state,初始为undefined
+        //参数二：代表dispatch调用时传入的操作对象，包括操作类型type,新的值newVal等
+        if(state === undefined){
+            state = 0
+        }
+        switch(action.type){
+            case 'add':
+                state ++;
+                break;
+            case 'remove':
+                state --
+                break
+        }
+        return state;//返回新的state达到状态的更新
+    }
+
+    //2.通过Redux的createStore创建仓库并会传入定义好的reducer函数以初始化状态state
+    const store = Redux.createStore(reducer)//完成仓库初始化,相当于Vuex.Store
+    //可通过store.getState获取到全局状态
+    oInp.value = store.getState()
+    //3.通过store.dispatch方法再次调用reducer对state进行操作
+    oAdd.onclick = function(){
+        //参数为一个action对象type为操作类型，用于reducer判断操作类型
+       store.dispatch({type:'add'}) 
+       oInp.value = store.getState()
+    }
+    oRemove.onclick = function(){
+        //参数为一个action对象type为操作类型，用于reducer判断操作类型
+       store.dispatch({type:'remove'}) 
+       oInp.value = store.getState()
+    }
+    
+    </script>
+</body>
+</html>

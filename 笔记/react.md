@@ -905,6 +905,89 @@ ReactDom.render(<App />,document.querySelector('#box'))
 
 
 
+# 顶级父类给所有子代传值(如:爷爷给孙子)
+
+```jsx
+// 需要三个组件，爷爷直接给孙子传递数据(不一定是孙子，只要是子辈都可以)
+import React from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
+class ErZi extends React.Component {
+  render () {
+    console.log(this.context)
+    this.context.testFn()
+    return (
+      <div>我是儿子： 我爷爷今年: {this.context.age}</div>
+      )
+  }
+}
+// 3.
+ErZi.contextTypes = {
+  age: PropTypes.string,
+  testFn: PropTypes.function
+}
+class FuQin extends React.Component {
+  render () {
+    console.log('爷爷:', this.props.age)
+    return (
+      <div>
+         <h1>我是父亲</h1>
+         <ErZi></ErZi>
+      </div>
+      )
+  }
+}
+
+class YeYe extends React.Component {
+
+  render () {
+    // const age = '998'
+    return (
+      <div>
+        <h1>我是爷爷</h1>
+        <FuQin></FuQin>
+      </div>
+      )
+  }
+  testFn () {
+    window.alert('我被调用')
+  }
+  //添加了这个方法就可以在所有子辈上访问这个顶级父类的方法或属性了
+  //但是需限制这个方法传递的参数的格式
+  //通过prop-types组件实现限制
+      //发送数据方设置childContextTypes
+      //接收数据方设置contextTypes
+  //只要满足限制的组件才能绑定传递数据的方法
+  getChildContext () {
+    return {
+      age: '18',
+      testFn: () => {
+        this.testFn()
+      }
+    }
+  }
+}
+// 2.
+YeYe.childContextTypes = {
+  // 限制这里传递的age必需是string格式
+  age: PropTypes.string,
+  testFn: PropTypes.function
+}
+ReactDOM.render(<YeYe></YeYe>, document.querySelector('#box'))
+
+// 传递的步骤:
+// 1.在爷爷组件中添加一个 getChildContext 原型方法,
+// 并且返回一个，要传递的数据在对象存储 (这个方法是在render后被调用)
+// 2.要给爷爷组件这个类, YeYe 添加一个 childContextTypes 属性,用来限制
+// 传递给子组件的数据的格式: 需要下载一个包： `npm i prop-types -S`
+// 3.在要接收数据的子组件中给组件添加一个 contextTypes属性，用来限制接收的数据
+// 的格式
+// 上面3步之后，就可以在子组件中使用 this.context 来获取爷爷组件传递的数据
+
+```
+
+
+
 
 
 
@@ -1012,6 +1095,461 @@ render(){
 
 
 
-# 路由
+# 路由4.0(react-router-dom)
 
 react的路由是所有框架中最简单的
+
+```jsx
+import {HashRouter,Route} from 'react-router-dom'//这个包中封装了很多组件
+//监听hash值的变化
+//根据Route指定的规则呈现不同的组件
+//使用要求
+//a.组件最外层需要使用HashRouter包裹，嵌套路由时只需写一个
+//b.HashRouter组件标签中间只能有一个根元素
+
+//首页组件
+const Home = ()=>(
+<div>
+ 	<h1>首页</h1>
+ </div>
+)
+
+
+const App = ()=>{
+  return (
+    <HashRouter>
+    	<div>
+          	<h1>dddd</h1>	
+  			<Router path='/home' component={Home}></Router>
+          	<h1>fff</h1>
+    	</div>
+    </HashRouter>
+  )
+}
+```
+
+
+
+
+
+# history.pushState(null,null,'/test')
+
+​	可以达到类似hash变化的效果(更改地址栏而不刷新页面),这样就不需要在地址栏加#
+
+这就得加一个BrowerRouter组件
+
+
+
+
+
+# Route标签中的path问题
+
+Route中的path属性默认是模糊匹配，只要锚点中是以这个path开头这个组件就会呈现
+
+可以通过添加exact属性来达到精确匹配的效果
+
+`<Route exact>`或者`<Route exact={true}>`
+
+
+
+
+
+# NavLink
+
+NavLink组件可以为当前点击的元素加一个样式
+
+
+
+
+
+
+
+# 路由导航的方式
+
+标签形式
+
+```jsx
+<Link to='/home'></Link>
+<NavLink to='/home' activeClassName='test'></Link>
+//NavLink与Link不同点是NavLink点击时会自动添加一个test样式名
+```
+
+js形式
+
+```jsx
+props.hsitory.push({pathname:'/home'})
+props.hsitory.go(-1)
+props.hsitory.goBack()
+```
+
+
+
+# 嵌套路由
+
+注意：
+
+​	1.在需要进行路由转换的Dom位置写Route标签就可以完成跳转和渲染,不同于vue
+
+​	 2.react中子组件的路由path设置中必须追加父组件路由的path，这点不同于vue
+
+可以通过props.match.path来动态的代表父路由以拼接到子路由上
+
+
+
+
+
+# Redirect组件(用于作页面跳转)
+
+redirect本身是立即跳转到指定路由的
+
+//需要和Swith 组件中使用
+
+//可以把路由包裹在Switch
+
+//如果Redirect包裹在Switch中时，当Switch所有的路由都不匹配时Redirect才执行跳转
+
+
+
+
+
+
+
+# 动态路由匹配
+
+/detail/:id
+
+//react通过props.match.params.id
+
+//注意动态路由即加了参数后就是精确匹配了,即使不加exact
+
+
+
+
+
+
+
+
+
+
+
+# 保证组件内this指向的另一种方法(非箭头函数)
+
+bind返回值是一个被改变this指向的方法
+
+```jsx
+constructor(){
+  super()
+  //指将this指向改为当前组件实例
+  this.handlerClick = this.handlerClick.bind(this)
+}
+//这样就可以直接用this了
+render(){
+  return (
+  	<div><button onClick={this.handlerClick()}>按钮</button></div>
+  )
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+# 微信ui界面框架weui
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Redux
+
+http://www.redux.org.cn/
+
+https://redux.js.org/
+
+> redux本身和react是没有关系的
+>
+> 只是用来管理数据的一种方式，类似于vuex
+>
+> //dispatch,createStore
+>
+> state可以是任意类型不同于vuex的必须是对象
+
+#### Redux.createStore
+
+> createStore是redux中提供的全局属性，用于创建一个创建仓库
+>
+> 需要提供一个修改仓库数据的reducer方法作为参数
+>
+> reducer的第一个参数代表state数据，返回值是新的state
+>
+> store.getState()也可以获取到全局数据
+>
+> ![01.关于redux](.\img\01.关于redux.jpg)![redux](.\img\redux.png)
+
+### 步骤:
+
+1.需要定义一个用来修改状态(state)的方法(reducer)
+
+//参数一：store中的状态(state),默认是undefined
+
+//参数二:dispatch的action对象，可用于判断操作类型以进行不同操作
+
+//返回值:是Store中的新的状态(state),会覆盖之前的状态,默认返回值为undefined
+
+2.调用Redux.createStore创建一个仓库
+
+参数是reducer函数，传入时就会立即执行，默认返回值为undefined,如果reducer中有了返回值就可以达到state的初始化
+
+通过store.getState可以获取state的值
+
+3.执行store.dispatch(action对象)以再次调用reducer方法达到数据修改
+
+参数action对象代表对state的一个新的操作,如{type:'Add',newVal:newVal}可通过type进行操作判断，通过newVal获取新的值
+
+
+
+
+
+
+
+
+
+dispatch参数是action,表示要做的操作类型
+
+#### 案例:使用redux完成加减
+
+##### 简版
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" >
+    <button class="add">+</button>
+    <button class="remove">-</button>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script>
+    const oInp = document.querySelector('input');
+    const oAdd = document.querySelector('.add');
+    const oRemove = document.querySelector('.remove');
+    //使用redux进行全局状态(数据)的管理
+    //分三步:
+    //1.创建reducer函数对全局状态进行初始化及操作
+    function reducer(state,action){
+        //参数一：代表全局状态state,初始为undefined
+        //参数二：代表dispatch调用时传入的操作对象，包括操作类型type,新的值newVal等
+        if(state === undefined){
+            state = 0
+        }
+        switch(action.type){
+            case 'add':
+                state ++;
+                break;
+            case 'remove':
+                state --
+                break
+        }
+        return state;//返回新的state达到状态的更新
+    }
+
+    //2.通过Redux的createStore创建仓库并会传入定义好的reducer函数以初始化状态state
+    const store = Redux.createStore(reducer)//完成仓库初始化,相当于Vuex.Store
+    //可通过store.getState获取到全局状态
+    oInp.value = store.getState()
+    //3.通过store.dispatch方法再次调用reducer对state进行操作
+    oAdd.onclick = function(){
+        //参数为一个action对象type为操作类型，用于reducer判断操作类型
+       store.dispatch({type:'add'}) 
+       oInp.value = store.getState()
+    }
+    oRemove.onclick = function(){
+        //参数为一个action对象type为操作类型，用于reducer判断操作类型
+       store.dispatch({type:'remove'}) 
+       oInp.value = store.getState()
+    }
+    
+    </script>
+</body>
+</html>
+```
+
+##### 封装版
+
+```js
+//reducer.js
+//用来初始化state和操作state
+
+//获取操作类型
+const {ActionType} = require('./actions') 
+
+function reducer(state,action){
+    if(state===undefined){
+        state = 0
+    }
+    switch(action.type){
+        case ActionType.ADD:
+        state += action.newV
+        break;
+        case ActionType.REMOVE:
+        state --;
+
+    }
+    return state;
+}
+module.exports = reducer
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+//actions.js
+//设置action对象
+
+
+//设置操作类型
+const ActionType = {
+    ADD:'add',
+    REMOVE:'remove'
+}
+
+function Add(newVal){
+    return {
+        type:ActionType.ADD,
+        newV:newVal
+    }
+}
+
+function Remove(){
+    return {
+        type:ActionType.REMOVE
+    }
+}
+
+
+module.exports = {
+    ActionType,
+    Add,
+    Remove
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+
+//store.js
+//初始化仓库
+
+const {createStore}=require('redux')
+
+//引入reducer
+const reducer = require('./reducer')
+
+const store = createStore(reducer)
+
+
+module.exports = store
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//index.js
+//操作state
+
+const oInp = document.querySelector('input');
+const oAdd = document.querySelector('.add');
+const oRemove = document.querySelector('.remove');
+
+const store = require('./store')
+const action = require('./actions')
+
+
+oInp.value = store.getState();
+
+oAdd.onclick = function(){
+
+   store.dispatch(action.Add(1)) 
+   oInp.value = store.getState()
+}
+oRemove.onclick = function(){
+ 
+   store.dispatch(action.Remove()) 
+   oInp.value = store.getState()
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export default 相当于model.exports
+
+export相当于exports
+
+
+
+
+
+
+
+
+
+# 图片路径错误解决方式
+
+vue会自动处理图片路径(vue-loader)，而react使用webpack默认不会处理这些路径
+
+解决方式:
+
+1.通过webpack的copy-webpack-plugin将静态资源复制一份到打包后的文件下
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+两个问题:事件冒泡,调转到当前路由再当前路由导航会有警告
