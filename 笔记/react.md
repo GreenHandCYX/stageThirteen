@@ -1010,7 +1010,7 @@ es7的::this法
 
 
 
-# react中获取原生dom的方式，在元素标签上加ref属性，通过this.ref获取
+# react中获取原生dom的方式，在元素标签上加ref属性，通过this.refs获取
 
 
 
@@ -1497,7 +1497,6 @@ oRemove.onclick = function(){
    store.dispatch(action.Remove()) 
    oInp.value = store.getState()
 }
-
 ```
 
 
@@ -1541,6 +1540,19 @@ vue会自动处理图片路径(vue-loader)，而react使用webpack默认不会�
 
 
 
+
+
+
+## **CSS3的box-sizing**
+
+box-sizing语法：
+
+> box-sizing ： content-box || border-box || inherit;
+
+- **当设置为box-sizing:content-box时，将采用标准模式(w3c)解析计算，也是默认模式；**
+- **当设置为box-sizing:border-box时，将采用怪异模式(ie)解析计算；**
+
+![例子截图](./img/20160429135909363)
 
 
 
