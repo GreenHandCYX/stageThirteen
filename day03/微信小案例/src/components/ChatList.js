@@ -11,9 +11,10 @@ const ActionType = act.ActionType;
     super()
   }
   delHandler(e,arg){
-   e.stopPropagation()
+  //  e.stopPropagation()
+   e.preventDefault()
     store.dispatch(act.Del(arg))
-    
+    this.setState({})
   }
   render () {
     const {chatList} = store.getState()

@@ -2,6 +2,7 @@
 import React,{Component} from 'react'
 import {Route,NavLink} from 'react-router-dom'
 
+
 import '../assets/style.css'
 
 import ChatList from './ChatList.js'
@@ -12,7 +13,7 @@ import Mine from './Mine.js'
 export default class Home extends Component{
     constructor(){
         super();
-      
+      console.log(React.axios)
     }
     render(){
         //获取父路由
@@ -63,7 +64,7 @@ export default class Home extends Component{
                         <dd>微信</dd>
                         </dl>
                     </NavLink>
-                    <NavLink to={`${path}/concat`} tag="dl">
+                    <NavLink activeClassName='active' to={`${path}/concat`} tag="dl">
                         <dl>
                         <dt className="iconfont icon-contact">
                             <i className="new-msg-count">2</i>
@@ -71,7 +72,7 @@ export default class Home extends Component{
                         <dd>通讯录</dd>
                         </dl>
                     </NavLink>
-                    <NavLink to={`${path}/find`} tag="dl">
+                    <NavLink activeClassName='active' to={`${path}/find`} tag="dl">
                         <dl>
                         <dt className="iconfont icon-find">
                             <i className="new-msg-dot"></i>
@@ -79,7 +80,7 @@ export default class Home extends Component{
                         <dd>发现</dd>
                         </dl>
                     </NavLink>
-                    <NavLink to={`${path}/mine`} tag="dl">
+                    <NavLink activeClassName='active' to={`${path}/mine`} tag="dl">
                         <dl>
                         <dt className="iconfont icon-me">
                             <i className="new-msg-dot"></i>

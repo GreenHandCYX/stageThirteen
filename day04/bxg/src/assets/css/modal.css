@@ -1,0 +1,14 @@
+body .show-modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  display: block;
+  background: rgba(0,0,0,.6);
+  z-index: 998
+}
+body .modal-dialog {
+  margin-top: 200px;
+}

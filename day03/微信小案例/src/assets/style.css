@@ -1,3 +1,4 @@
-.active{
-    color:greenyellow!important;
+
+ #wx-nav nav .active dt{
+  color:rgb(47, 255, 64) !important;
 }

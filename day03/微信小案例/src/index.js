@@ -1,6 +1,9 @@
 
 import React from 'react'
 
+import axios from 'axios'
+React.axios = axios
+
 import ReactDom from 'react-dom'
 
 //使用react-router-dom控制路由

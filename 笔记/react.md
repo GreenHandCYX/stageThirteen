@@ -297,7 +297,6 @@ const element = {
     htmlFor:'test'
   }
 }
-
 ```
 
 
@@ -393,7 +392,7 @@ const element = (
 
 ```jsx
  //若要修改则必须: a.通过onChange事件获取实时表单的值放到一个变量中
-                   //b.通过setState更新模板中即react元素中相应的值
+                //b.通过setState更新模板中即react元素中相应的值
 ```
 
 
@@ -506,7 +505,6 @@ ReactDom.render(<Btn />,dom对象)//推荐写法
 
 //当我们写<Btn />是会判断如果Btn是普通函数，则直接调用
 //如果继承自React.Component会先new Btn()再调用实例的render方法
-
 ```
 
 
@@ -1562,6 +1560,222 @@ box-sizing语法：
 
 
 
+# this.setState补充
+
+this.setState({[key]:e.target.value})//key就可以是一个变量
 
 
-两个问题:事件冒泡,调转到当前路由再当前路由导航会有警告
+
+
+
+
+
+
+
+# NavLink补充
+
+to属性的值可以是字符串也可以是对象
+
+`<NavLink to={pathname:'/home'}>`
+
+
+
+
+
+
+
+# react也可以用axios发请求
+
+react将axios绑定到全局的方法：React.axios = axios
+
+
+
+
+
+
+
+
+
+# axios拦截器实现全局对响应错误时（如都有errmsg的情况）的判断
+
+```js
+axios.interceptors.response.use(res=>{
+  if(res.data.errcode !== 0){
+    alert(res.data.errmsg)
+    return Promise.reject('err');//返回promise的reject的方法就会中断所有axios.then()的第一个参数方法
+  }
+  return res
+})
+```
+
+
+
+
+
+
+
+
+
+# 解构对象的属性的属性
+
+{data:{errcode,errmsg}}解构了data对象中的errcode,errmsg属性
+
+![Snipaste_2017-12-05_09-51-16](.\img\Snipaste_2017-12-05_09-51-16.png)
+
+
+
+
+
+![Snipaste_2017-12-05_09-53-22](.\img\Snipaste_2017-12-05_09-53-22.png)
+
+
+
+
+
+
+
+
+
+# react模板jsx{}中本身不支持直接写if判断,用三元表达式或函数替换
+
+ JSX 只是函数调用和对象创建的语法糖
+
+
+
+
+
+
+
+# react中也可以使用ref属性进行父子组件间的传值
+
+即父组件引用子组件时通过ref传递的是子组件的实例
+
+
+
+
+
+# 跨域请求
+
+jsonp要求前后端搭配
+
+cors跨域要求后端
+
+反向代理(apache，php的file__get_contents)要求前端操作
+
+
+
+
+
+# react中以对象的形式处理类名的添加需要下载npm包classNames或者自己封装
+
+
+
+
+
+
+
+# react中单选框
+
+```jsx
+<label className="radio-inline">
+  <input
+    onChange={e => this.handlerChangeValue(e, 'gender')}
+    type="radio" value="0" checked={gender == 0} /> 男
+</label>
+<label className="radio-inline">
+  <input
+    onChange={e => this.handlerChangeValue(e, 'gender')}
+    type="radio" value="1" checked={gender == 1}/>  女
+</label>
+```
+
+
+
+
+
+# react中复选框
+
+```jsx
+ 测试多选框
+                                <input type="checkbox"
+                                // onChange={e => this.handlerChangeValue(e, 'isArgee')}
+                                onChange={
+                                  e => {
+                                  // this.state.user.isAgree = e.target.checked
+                                  this.state.user.isAgree = !isAgree
+                                  // !this.state.user.isAgree
+                                  this.setState({})
+                                  // 不能这样 this.setState({isAgree: !isAgree})
+                                  }
+                                }
+                                value={isAgree}
+                                />
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# `Promise`的静态方法
+
+> `Promise`还有四个静态方法，分别是`resolve`、`reject`、`all`、`race`，下面我们一一介绍。
+>
+> 除了通过`new Promise()`的方式，我们还有两种创建`Promise`对象的方法：
+>
+> **Promise.resolve()** 它相当于创建了一个立即`resolve`的对象。如下两段代码作用相同：
+>
+> ```
+> Promise.resolve(5)
+>
+> new Promise(function(resolve){
+>     resolve(5)
+> })
+> ```
+>
+> 它使得promise对象直接`resolve`，并把5传到后面`then`添加的成功函数中。
+>
+> ```
+> Promise.resolve(5).then(function(value){
+>     console.log(value) // 5
+> })
+> ```
+>
+> **Promise.reject()** 很明显它相当于创建了一个立即`reject`的对象。如下两段代码作用相同：
+>
+> ```
+> Promise.reject(new Error('error'))
+>
+> new Promise(function(resolve, reject){
+>     reject(new Error('error'))
+> })
+> ```
+>
+> 它使得promise对象直接`reject`，并把error传到后面`catch`添加的函数中。
+>
+> ```
+> Promise.reject(new Error('error')).catch(function(reason){
+>     console.log(reason) // Error: error(…)
+> })
+> ```
+>
+> **Promise.all()** 它接收一个promise对象组成的数组作为参数，并返回一个新的`promise`对象。
+>
+> 当数组中所有的对象都`resolve`时，新对象状态变为`fulfilled`，所有对象的`resolve`的`value`依次添加组成一个新的数组，并以新的数组作为新对象`resolve`的`value`，例：
+>
+> ```
+> Promise.all([Promise.resolve(5), 
+>   Promise.resolve(6), 
+>   Promise.resolve(7)]).then(function(value){
+>     console.log('fulfill', value)  // fulfill [5, 6, 7]
+> }, function(reason){
+>     console.log('reject',reason)
+> })
+> ```
