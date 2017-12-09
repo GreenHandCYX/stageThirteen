@@ -28,7 +28,7 @@ export default class Signin extends Component{
         //跳转到首页
        this.props.history.push({pathname:'/home'})
       }
-    )
+    ).catch()
   }
   render(){
     return (

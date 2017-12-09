@@ -905,6 +905,50 @@ ReactDom.render(<App />,document.querySelector('#box'))
 
 # 顶级父类给所有子代传值(如:爷爷给孙子)
 
+### 使用this.context全局变量,官方不推荐使用,通常通过redux代替
+
+1.在父组件中将传递的数据放在getChildContext方法的返回值中
+
+```js
+getChildContext(){
+  return {
+    userName : this.state.userName
+    callback: this.cbChange.bind(this) 
+  }
+}
+```
+
+2.父组件设置传递的数据的格式
+
+```js
+App.childContextTypes = {
+  userName:React.PropTypes.string,
+  callback:React.PropTypes.function
+}
+```
+
+3.子组件设置传递的数据的格式,符合时就可以通过this.context接收了
+
+```js
+ChildSon.contextTypes = {
+  userName:React.PropTypes.string,
+   callback:React.PropTypes.function
+}
+
+
+render(){
+  console.log(this.context)
+}
+```
+
+
+
+
+
+
+
+
+
 ```jsx
 // 需要三个组件，爷爷直接给孙子传递数据(不一定是孙子，只要是子辈都可以)
 import React from 'react'

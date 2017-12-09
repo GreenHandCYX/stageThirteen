@@ -4,21 +4,19 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 class ErZi extends React.Component {
   render () {
-    console.log(this.context)
     this.context.testFn()
     return (
-      <div>我是儿子： 我爷爷今年: {this.context.age}</div>
+      <div>我是儿子： 我爷爷今年: {this.context.username}</div>
       )
   }
 }
 // 3.
 ErZi.contextTypes = {
-  age: PropTypes.string,
+  username: PropTypes.string,
   testFn: PropTypes.function
 }
 class FuQin extends React.Component {
   render () {
-    console.log('爷爷:', this.props.age)
     return (
       <div>
          <h1>我是父亲</h1>
@@ -29,18 +27,25 @@ class FuQin extends React.Component {
 }
 
 class YeYe extends React.Component {
-
+  constructor(){
+    super()
+    this.state ={
+      username:'YEYE'
+    }
+  }
   render () {
     // const age = '998'
     return (
       <div>
-        <h1>我是爷爷</h1>
+        
+        <h1>我是爷爷{this.state.username}</h1>
         <FuQin></FuQin>
       </div>
       )
   }
-  testFn () {
-    window.alert('我被调用')
+  testFn (val) {
+    alert('123')
+    // this.setState({username:val})
   }
   //添加了这个方法就可以在所有子辈上访问这个顶级父类的方法或属性了
   //但是需限制这个方法传递的参数的格式
@@ -50,8 +55,9 @@ class YeYe extends React.Component {
   //只要满足限制的组件才能绑定传递数据的方法
   getChildContext () {
     return {
-      age: '18',
-      testFn: () => {
+      username:this.state.username,
+      testFn: (val) => {
+        // this.testFn(val)
         this.testFn()
       }
     }
@@ -60,7 +66,7 @@ class YeYe extends React.Component {
 // 2.
 YeYe.childContextTypes = {
   // 限制这里传递的age必需是string格式
-  age: PropTypes.string,
+  username: PropTypes.string,
   testFn: PropTypes.function
 }
 ReactDOM.render(<YeYe></YeYe>, document.querySelector('#box'))

@@ -33,15 +33,15 @@ axios.interceptors.request.use(config=>{
 axios.interceptors.response.use(res=>{
   nprogress.done()
 
-
-  if(res.data.errcode!==0){
-    alert(res.data.errmsg)
-    //返回一个Promise.reject可以阻断axios.then的第一个参数回调方法的执行
-    return Promise.reject(new Error('error')).catch(function(reason){
-      console.log('reason') // Error: error(…)
-  })
-  }
-  return res;
+console.dir(Promise)
+   //返回一个Promise.reject可以阻断axios.then的第一个参数回调方法的执行
+  return new Promise((resolve,reject) =>{
+    if(res.data.errcode!==0){
+      alert(res.data.errmsg)
+       reject(res)
+    }
+    resolve(res)
+  });
 })
 
 
