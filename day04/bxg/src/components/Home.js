@@ -54,7 +54,12 @@ export default class Home extends Component{
   }
   getUserInfo(){
     //获取本地数据
-    const user = JSON.parse(localStorage.getItem('userinfo') || '{}')
+    const user = JSON.parse(localStorage.getItem('userinfo') )|| ''
+  
+    if(!user){
+      console.log(user)
+      return this.props.history.push({pathname:'/signin'})
+    }
     this.setState({user})
   }
   render(){

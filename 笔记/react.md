@@ -442,7 +442,7 @@ const ele = <div className="hide"></div>
 
       //如果用style控制样式应该是一个对象
       
-const ele = <div style={ {color:'red',backgroundColor:'grenn'} }>我是</div>
+const ele = <div style={{color:'red',backgroundColor:'grenn'} }>我是</div>
 ```
 
 
